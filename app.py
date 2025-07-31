@@ -58,11 +58,15 @@ def iceberg_chart(chart_name):
     if not supabase:
         return "Supabase client not initialized.", 500
 
-    # 1. Get chart ID
-    chart_response = supabase.table('iceberg_charts').select('id').eq('name', chart_name).single().execute()
+    # --- MODIFIED DATABASE QUERY ---
+    # 1. Get chart ID without using .single() for more robust error handling on Vercel
+    chart_response = supabase.table('iceberg_charts').select('id').eq('name', chart_name).execute()
+    
+    # Check if any data was returned. If not, the chart doesn't exist.
     if not chart_response.data:
         return "Chart not found", 404
-    chart_id = chart_response.data['id']
+    chart_id = chart_response.data[0]['id']
+    # --- END OF MODIFICATION ---
 
     # 2. Get all layers and their entries for that chart
     layers_response = supabase.table('iceberg_layers').select('*, iceberg_entries(*)').eq('chart_id', chart_id).order('layer_order').execute()
@@ -95,7 +99,6 @@ def get_explanation():
     if not all([chart_name, entry_text, GEMINI_API_KEY, CUSTOM_SEARCH_API_KEY, CUSTOM_SEARCH_ENGINE_ID]):
         return jsonify({'error': 'Missing data or API key configuration.'}), 400
 
-    # --- UPDATED SEARCH LOGIC ---
     # 1. Get text context from Google Custom Search with multiple query attempts
     search_context = "Web search failed or returned no results."
     queries_to_try = [
