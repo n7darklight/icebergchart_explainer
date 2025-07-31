@@ -6,6 +6,7 @@ from flask import Flask, render_template, request, jsonify, redirect, url_for
 from dotenv import load_dotenv
 from supabase import create_client, Client
 import google.generativeai as genai
+from urllib.parse import unquote
 
 # Load environment variables from .env file
 load_dotenv()
@@ -59,8 +60,11 @@ def iceberg_chart(chart_name):
         return "Supabase client not initialized.", 500
 
     # --- MODIFIED DATABASE QUERY ---
-    # 1. Get chart ID without using .single() for more robust error handling on Vercel
-    chart_response = supabase.table('iceberg_charts').select('id').eq('name', chart_name).execute()
+    # Explicitly decode the chart_name from the URL to handle spaces (%20) correctly on Vercel.
+    decoded_chart_name = unquote(chart_name)
+    
+    # 1. Get chart ID using the decoded name
+    chart_response = supabase.table('iceberg_charts').select('id').eq('name', decoded_chart_name).execute()
     
     # Check if any data was returned. If not, the chart doesn't exist.
     if not chart_response.data:
@@ -72,7 +76,7 @@ def iceberg_chart(chart_name):
     layers_response = supabase.table('iceberg_layers').select('*, iceberg_entries(*)').eq('chart_id', chart_id).order('layer_order').execute()
     if not layers_response.data:
         # Handle case where chart exists but has no layers
-        return render_template('iceberg.html', chart_name=chart_name, iceberg_data=[], total_entries=0)
+        return render_template('iceberg.html', chart_name=decoded_chart_name, iceberg_data=[], total_entries=0)
 
     # 3. Format data for the template
     iceberg_data = []
@@ -85,7 +89,7 @@ def iceberg_chart(chart_name):
         })
         total_entries += len(entries)
 
-    return render_template('iceberg.html', chart_name=chart_name, iceberg_data=iceberg_data, total_entries=total_entries)
+    return render_template('iceberg.html', chart_name=decoded_chart_name, iceberg_data=iceberg_data, total_entries=total_entries)
 
 # --- Explanation API ---
 
