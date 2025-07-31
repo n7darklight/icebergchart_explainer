@@ -63,7 +63,7 @@ def iceberg_chart(chart_name):
     # Explicitly decode the chart_name from the URL to handle spaces (%20) correctly on Vercel.
     decoded_chart_name = unquote(chart_name)
     
-    # 1. Get chart ID using the decoded name
+    # 1. Get chart ID using the decoded name, without .single() for more robust error handling
     chart_response = supabase.table('iceberg_charts').select('id').eq('name', decoded_chart_name).execute()
     
     # Check if any data was returned. If not, the chart doesn't exist.
