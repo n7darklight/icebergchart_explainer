@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iceberg Chart Explainer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-white font-sans">
+    <div class="container mx-auto px-4 py-8">
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-cyan-400">Iceberg Chart Explainer</h1>
+            <p class="text-lg text-gray-400 mt-2">Select a chart to begin your descent.</p>
+        </header>
+
+        <main>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                {% for chart in charts %}
+                <a href="{{ url_for('iceberg_chart', chart_name=chart) }}"
+                   class="block bg-gray-800 rounded-lg p-6 shadow-lg hover:bg-gray-700 hover:shadow-cyan-500/20 transform hover:-translate-y-1 transition-all duration-300">
+                    <h2 class="text-xl font-semibold text-white truncate">{{ chart.replace('_', ' ') }}</h2>
+                    <p class="text-gray-400 mt-2">Click to explore</p>
+                </a>
+                {% else %}
+                <p class="text-center text-gray-500 col-span-full">No iceberg charts found in the database.</p>
+                {% endfor %}
+            </div>
+        </main>
+
+        <footer class="text-center mt-16 text-gray-500">
+            <a href="{{ url_for('manage_charts') }}" class="text-cyan-400 hover:underline">Manage Charts</a>
+            <p class="mt-2">Powered by Flask, Supabase & Google Gemini</p>
+        </footer>
+    </div>
+</body>
+</html>

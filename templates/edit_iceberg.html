@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit: {{ chart.name.replace('_', ' ') }}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-white font-sans">
+    <div class="container mx-auto px-4 py-8">
+        <header class="mb-8">
+            <a href="{{ url_for('manage_charts') }}" class="text-cyan-400 hover:text-cyan-300 transition">&larr; Back to Manage Charts</a>
+            <h1 class="text-4xl font-bold text-cyan-400 mt-2">Edit: {{ chart.name.replace('_', ' ') }}</h1>
+        </header>
+
+        <!-- Layers and Entries -->
+        <div class="space-y-6">
+            {% for layer in layers %}
+            <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-2xl font-semibold">{{ layer.layer_name }}</h2>
+                    <form action="{{ url_for('delete_layer', layer_id=layer.id) }}" method="POST" onsubmit="return confirm('Delete layer?');">
+                        <button type="submit" class="text-red-500 hover:text-red-400 font-semibold">Delete Layer</button>
+                    </form>
+                </div>
+
+                <!-- Entries List -->
+                <ul class="space-y-2 mb-4">
+                    {% for entry in layer.iceberg_entries %}
+                    <li class="flex justify-between items-center bg-gray-700 p-3 rounded-md">
+                        <span>{{ entry.entry_text }}</span>
+                        <form action="{{ url_for('delete_entry', entry_id=entry.id) }}" method="POST" onsubmit="return confirm('Delete entry?');">
+                            <button type="submit" class="text-red-500 text-xs hover:text-red-400">delete</button>
+                        </form>
+                    </li>
+                    {% else %}
+                    <li class="text-gray-400">No entries in this layer.</li>
+                    {% endfor %}
+                </ul>
+
+                <!-- Add Entry Form -->
+                <form action="{{ url_for('add_entry', layer_id=layer.id) }}" method="POST" class="flex items-center gap-2">
+                    <input type="text" name="entry_text" placeholder="New Entry Text" required class="flex-grow bg-gray-600 border border-gray-500 rounded-md py-1 px-3">
+                    <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-bold py-1 px-3 rounded-md transition">Add Entry</button>
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Add New Layer -->
+        <div class="bg-gray-800 p-6 rounded-lg shadow-lg mt-8">
+            <h2 class="text-2xl font-semibold mb-4">Add New Layer</h2>
+            <form action="{{ url_for('add_layer', chart_id=chart.id) }}" method="POST" class="flex items-center gap-4">
+                <input type="text" name="layer_name" placeholder="New Layer Name" required class="flex-grow bg-gray-700 border border-gray-600 rounded-md py-2 px-4">
+                <button type="submit" class="bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-4 rounded-md transition">Add Layer</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

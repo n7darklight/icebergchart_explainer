@@ -1,0 +1,62 @@
+/* Using Tailwind CSS for most styling, this is for custom additions */
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+.iceberg-container {
+    max-width: 900px;
+}
+
+.iceberg-layer-wrapper {
+    margin-bottom: 0.25rem; /* Equivalent to mb-1 */
+}
+
+.iceberg-layer {
+    clip-path: polygon(5% 0, 95% 0, 100% 100%, 0% 100%);
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    transition: width 0.5s ease-in-out;
+}
+
+/* Make layers progressively narrower */
+.iceberg-layer-wrapper:nth-child(1) .iceberg-layer { width: 100%; }
+.iceberg-layer-wrapper:nth-child(2) .iceberg-layer { width: 98%; }
+.iceberg-layer-wrapper:nth-child(3) .iceberg-layer { width: 96%; }
+.iceberg-layer-wrapper:nth-child(4) .iceberg-layer { width: 94%; }
+.iceberg-layer-wrapper:nth-child(5) .iceberg-layer { width: 92%; }
+.iceberg-layer-wrapper:nth-child(6) .iceberg-layer { width: 90%; }
+.iceberg-layer-wrapper:nth-child(7) .iceberg-layer { width: 88%; }
+.iceberg-layer-wrapper:nth-child(8) .iceberg-layer { width: 86%; }
+.iceberg-layer-wrapper:nth-child(9) .iceberg-layer { width: 84%; }
+.iceberg-layer-wrapper:nth-child(10) .iceberg-layer { width: 82%; }
+.iceberg-layer-wrapper:nth-child(11) .iceberg-layer { width: 80%; }
+
+
+.prose p {
+    margin-bottom: 1em;
+}
+
+.prose b {
+    color: #a5f3fc; /* Light cyan for bold text */
+}
+
+/* For mobile explanation panel */
+#explanation-panel.is-open {
+    transform: translateY(0);
+}
+
+/* Custom scrollbar for a better look */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #1f2937; /* bg-gray-800 */
+}
+::-webkit-scrollbar-thumb {
+    background: #374151; /* bg-gray-700 */
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #4b5563; /* bg-gray-600 */
+}

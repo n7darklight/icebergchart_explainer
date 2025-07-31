@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ chart_name.replace('_', ' ') }} - Iceberg Explainer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-white font-sans">
+    <div class="flex flex-col lg:flex-row h-screen overflow-hidden">
+        <!-- Iceberg Chart Column -->
+        <div class="lg:w-2/3 w-full h-1/2 lg:h-screen overflow-y-auto p-4 md:p-8 iceberg-bg">
+            <header class="mb-8">
+                <a href="/" class="text-cyan-400 hover:text-cyan-300 transition">&larr; Back to Charts</a>
+                <h1 class="text-3xl md:text-4xl font-bold mt-2">{{ chart_name.replace('_', ' ') }}</h1>
+            </header>
+            
+            <div class="iceberg-container mx-auto">
+                {% for layer in iceberg_data %}
+                    {% if layer.entries %}
+                    <div class="iceberg-layer-wrapper">
+                        <h2 class="font-bold text-xl md:text-2xl mb-2 text-white pl-4">{{ layer.layer }}</h2>
+                        <!-- The layer itself is now a flex container to center its content -->
+                        <div class="iceberg-layer relative flex justify-center items-center rounded-md shadow-lg"
+                             data-index="{{ loop.index }}">
+                            <!-- This inner div holds the entries and has padding -->
+                            <div class="flex flex-wrap gap-2 p-6">
+                                {% for entry in layer.entries %}
+                                <button class="iceberg-entry bg-slate-100 hover:bg-slate-200 text-slate-800 transition-all duration-200 text-sm md:text-base font-medium py-2 px-3 rounded-md shadow"
+                                        data-entry="{{ entry.text }}">
+                                    {{ entry.text }}
+                                </button>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Explanation Column -->
+        <div id="explanation-panel" class="lg:w-1/3 w-full h-1/2 lg:h-screen bg-gray-800 shadow-2xl p-6 md:p-8 flex flex-col fixed lg:relative bottom-0 lg:bottom-auto transform translate-y-full lg:translate-y-0 transition-transform duration-500 ease-in-out">
+            <div class="flex-grow overflow-y-auto">
+                <h2 id="explanation-title" class="text-2xl font-bold text-cyan-400 mb-4">Select an Entry</h2>
+                <!-- Changed object-cover to object-contain to prevent cropping -->
+                <img id="explanation-image" src="" alt="Related Image" class="hidden w-full h-auto max-h-64 object-contain rounded-lg mb-4 bg-black/20">
+                <div id="explanation-content" class="text-gray-300 leading-relaxed prose">
+                    <p>Click on an entry from the iceberg chart to see an AI-generated explanation here.</p>
+                </div>
+            </div>
+            <button id="close-panel" class="lg:hidden absolute top-4 right-4 text-white bg-gray-700 rounded-full p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const CHART_NAME = "{{ chart_name }}";
+    </script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
