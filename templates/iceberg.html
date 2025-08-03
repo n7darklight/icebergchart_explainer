@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{{ url_for('static', filename='icon.png') }}" type="image/png">
     <title>{{ chart_name.replace('_', ' ') }} - Iceberg Explainer</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
@@ -22,10 +23,8 @@
                     {% if layer.entries %}
                     <div class="iceberg-layer-wrapper">
                         <h2 class="font-bold text-xl md:text-2xl mb-2 text-white pl-4">{{ layer.layer }}</h2>
-                        <!-- The layer itself is now a flex container to center its content -->
                         <div class="iceberg-layer relative flex justify-center items-center rounded-md shadow-lg"
                              data-index="{{ loop.index }}">
-                            <!-- This inner div holds the entries and has padding -->
                             <div class="flex flex-wrap gap-2 p-6">
                                 {% for entry in layer.entries %}
                                 <button class="iceberg-entry bg-slate-100 hover:bg-slate-200 text-slate-800 transition-all duration-200 text-sm md:text-base font-medium py-2 px-3 rounded-md shadow"
@@ -45,8 +44,14 @@
         <div id="explanation-panel" class="lg:w-1/3 w-full h-1/2 lg:h-screen bg-gray-800 shadow-2xl p-6 md:p-8 flex flex-col fixed lg:relative bottom-0 lg:bottom-auto transform translate-y-full lg:translate-y-0 transition-transform duration-500 ease-in-out">
             <div class="flex-grow overflow-y-auto">
                 <h2 id="explanation-title" class="text-2xl font-bold text-cyan-400 mb-4">Select an Entry</h2>
-                <!-- Changed object-cover to object-contain to prevent cropping -->
-                <img id="explanation-image" src="" alt="Related Image" class="hidden w-full h-auto max-h-64 object-contain rounded-lg mb-4 bg-black/20">
+                <div class="relative">
+                    <img id="explanation-image" src="" alt="Related Image" class="hidden w-full h-auto max-h-64 object-contain rounded-lg mb-4 bg-black/20">
+                    <button id="refresh-image-btn" class="hidden absolute top-2 right-2 bg-black/50 hover:bg-black/75 text-white rounded-full p-1.5 transition" title="Get a different image">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 110 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </div>
                 <div id="explanation-content" class="text-gray-300 leading-relaxed prose">
                     <p>Click on an entry from the iceberg chart to see an AI-generated explanation here.</p>
                 </div>

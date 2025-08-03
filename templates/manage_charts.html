@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{{ url_for('static', filename='icon.png') }}" type="image/png">
     <title>Manage Charts</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
@@ -15,8 +16,32 @@
             <h1 class="text-4xl font-bold text-cyan-400 mt-2">Manage Iceberg Charts</h1>
         </header>
 
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="p-4 mb-4 text-sm rounded-lg
+                    {% if category == 'success' %} bg-green-900 text-green-300
+                    {% elif category == 'danger' %} bg-red-900 text-red-300
+                    {% else %} bg-blue-900 text-blue-300 {% endif %}"
+                     role="alert">
+                    <span class="font-medium">{{ message }}</span>
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
         <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
-            <!-- Add new chart form -->
+            <div class="mb-8 p-4 border border-gray-700 rounded-lg">
+                <h2 class="text-2xl font-semibold mb-4">AI Categorization</h2>
+                <p class="text-gray-400 mb-4">Click this button to automatically categorize any new charts you've added. This only needs to be run once per batch of new charts.</p>
+                <form action="{{ url_for('categorize_charts') }}" method="POST">
+                    <button type="submit"
+                            class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-md transition">
+                        Categorize New Charts
+                    </button>
+                </form>
+            </div>
+
             <div class="mb-8">
                 <h2 class="text-2xl font-semibold mb-4">Add New Chart</h2>
                 <form action="{{ url_for('add_chart') }}" method="POST" class="flex items-center gap-4">
@@ -29,13 +54,15 @@
                 </form>
             </div>
 
-            <!-- List of existing charts -->
             <div>
                 <h2 class="text-2xl font-semibold mb-4">Existing Charts</h2>
                 <ul class="space-y-3">
                     {% for chart in charts %}
                     <li class="flex justify-between items-center bg-gray-700 p-4 rounded-md">
-                        <span class="font-medium">{{ chart.name.replace('_', ' ') }}</span>
+                        <div>
+                            <span class="font-medium">{{ chart.name.replace('_', ' ') }}</span>
+                            <span class="text-xs ml-2 py-1 px-2 rounded-full bg-gray-600 text-gray-300">{{ chart.category or 'Uncategorized' }}</span>
+                        </div>
                         <div class="flex items-center gap-4">
                             <a href="{{ url_for('edit_iceberg', chart_id=chart.id) }}"
                                class="text-yellow-400 hover:text-yellow-300 font-semibold">Edit</a>
