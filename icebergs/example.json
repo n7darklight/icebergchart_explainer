@@ -1,0 +1,21 @@
+[
+  {
+    "layer": "Layer 1",
+    "entries": []
+  },
+  {
+    "layer": "Layer 2",
+    "entries": []
+  },
+  {
+    "layer": "Origin",
+    "entries": [
+      {
+        "text": "Original",
+        "metadata": {
+          "metadata_1": "xxxx"
+        }
+      }
+    ]
+ }
+]
