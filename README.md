@@ -21,6 +21,8 @@ This platform is built for communities, content creators, and enthusiasts who wa
     -   **Client-Side Caching**: Explanations are cached in the user's browser session, minimizing redundant API calls and speeding up navigation.
 -   **Easy Deployment**: Designed for simple, one-click deployment on platforms like Vercel.
 
+![App Screenshot](https://res.cloudinary.com/deak3thl9/image/upload/v1754392661/Screenshot_2025-08-05_174106_mplpae.png)
+
 ## ⚠️ A Note on Content & Copyright
 
 This project is a **tool** for creating and hosting your own original content. It is not intended for, and does not encourage, the violation of copyright by scraping or copying content from other websites like `icebergcharts.com`.
